@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -30,7 +31,27 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+     //dd($request);
+     // 1.- Validamos el formulario, utilizando las validaciones de laravel
+     $request->validate([
+        'titulo'=>['required', 'string', 'min:5', 'unique:posts,titulo'],
+        'contenido'=>['required', 'string', 'min:10'],
+        'publicado'=>['nullable'],
+        'imagen'=>['nullable', 'image', 'max:2024']
+     ]);
+     //2.- Si no hay errores pasamos de esta linea, ie guardamos los datos
+     $publicado=($request->publicado) ? "SI" : "NO";
+     $ruta=($request->imagen) ? $request->imagen->store('posts') : "posts/default.png";
+     Post::create([
+        'titulo'=>$request->titulo,
+        'contenido'=>$request->contenido,
+        'publicado'=>$publicado,
+        'imagen'=>$ruta
+     ]);
+     //3.- volvemos a la pagina posts y nos creamos sesion flas para mostra mensaje
+     return redirect()->route('posts.index')->with('mensaje', 'Post creado');
+     
+
     }
 
     /**

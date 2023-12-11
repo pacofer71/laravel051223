@@ -6,27 +6,36 @@
     NUEVO POST
 @endsection
 @section('contenido')
-    <form method="POST" action="" enctype="multipart/form-data"
+    <form method="POST" action="{{ route('posts.store') }}" enctype="multipart/form-data"
         class="w-3/4 p-4 rounded-xl shadow-xl bg-gray-200 mx-auto">
+        @csrf <!-- para evitar los ataques csrf a formularios, es obligatorio -->
         <div class="mb-6">
             <label for="titulo" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                 Título</label>
             <input type="text" name="titulo" id="nombre" placeholder="Título..."
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            @error('titulo')
+                <x-msgerror>
+                    {{ $message }}
+                </x-msgerror>
+            @enderror
         </div>
         <div class="mb-6">
             <label for="cont" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                 Contenido</label>
             <textarea name="contenido" rows='5' id="cont"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
-
+            @error('contenido')
+                <x-msgerror>
+                    {{ $message }}
+                </x-msgerror>
+            @enderror
         </div>
         <div class="mb-6">
             <label for="publicado" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                 Publicado</label>
             <div class="flex justify-start align-center">
-                <input type="checkbox" name="publicado" id="publicado"
-                    class="">
+                <input type="checkbox" name="publicado" id="publicado" class="">
                 <span class="ml-2 font-bold">SI</span>
             </div>
         </div>
@@ -38,9 +47,15 @@
                     <input type="file" id="imagen" oninput="img.src=window.URL.createObjectURL(this.files[0])"
                         name="imagen" accept="image/*"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                    @error('imagen')
+                        <x-msgerror>
+                            {{ $message }}
+                        </x-msgerror>
+                    @enderror
                 </div>
                 <div class="w-1/2">
-                    <img src="{{Storage::url('posts/default.png')}}" class="h-72 rounded w-full object-cover border-4 border-black" id="img">
+                    <img src="{{ Storage::url('posts/default.png') }}"
+                        class="h-72 rounded w-full object-cover border-4 border-black" id="img">
                 </div>
             </div>
 
