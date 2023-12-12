@@ -3,16 +3,17 @@
     crear
 @endsection
 @section('cabecera')
-    NUEVO POST
+    EDITAR POST
 @endsection
 @section('contenido')
-    <form method="POST" action="{{ route('posts.store') }}" enctype="multipart/form-data"
+    <form method="POST" action="{{ route('posts.update', $post) }}" enctype="multipart/form-data"
         class="w-3/4 p-4 rounded-xl shadow-xl bg-gray-200 mx-auto">
         @csrf <!-- para evitar los ataques csrf a formularios, es obligatorio -->
+        @method('PUT')
         <div class="mb-6">
             <label for="titulo" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                 Título</label>
-            <input type="text" name="titulo" id="nombre" placeholder="Título..." value="{{ old('titulo') }}"
+            <input type="text" name="titulo" id="nombre" placeholder="Título..." value="{{ old('titulo', $post->titulo) }}"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             @error('titulo')
                 <x-msgerror>
@@ -24,7 +25,7 @@
             <label for="cont" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                 Contenido</label>
             <textarea name="contenido" rows='5' id="cont"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">{{ old('contenido') }}</textarea>
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">{{ old('contenido', $post->contenido) }}</textarea>
             @error('contenido')
                 <x-msgerror>
                     {{ $message }}
@@ -35,7 +36,8 @@
             <label for="publicado" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                 Publicado</label>
             <div class="flex justify-start align-center">
-                <input type="checkbox" name="publicado" value="valor" id="publicado" class="" @checked(old('publicado')=="valor")>
+                <input type="checkbox" name="publicado" 
+                value="SI" id="publicado" class="" @checked(old('publicado', $post->publicado)=="SI")>
                 <span class="ml-2 font-bold">SI</span>
             </div>
         </div>
@@ -54,7 +56,7 @@
                     @enderror
                 </div>
                 <div class="w-1/2">
-                    <img src="{{ Storage::url('posts/default.png') }}"
+                    <img src="{{ Storage::url($post->imagen) }}"
                         class="h-72 rounded w-full object-cover border-4 border-black" id="img">
                 </div>
             </div>
@@ -64,7 +66,7 @@
         <div class="flex flex-row-reverse">
             <button type="submit" name="btn"
                 class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                <i class="fas fa-save mr-2"></i>GUARDAR
+                <i class="fas fa-edit mr-2"></i>EDITAR
             </button>
             <button type="reset"
                 class="mr-2 text-white bg-yellow-700 hover:bg-yellow-800 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-blue-800">

@@ -46,11 +46,20 @@
                         <td class="px-6 py-4">
                             {{ $item->contenido }}
                         </td>
-                        <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                        <td @class([
+                             'font-semibold px-6 py-4',
+                             'text-blue-700'=>$item->publicado=='SI',
+                             'text-red-600 line-through'=>$item->publicado=='NO',
+                        ])>
                             {{ $item->publicado }}
                         </td>
-                        <td class="px-6 py-4">
-                            <a href="#" class="font-medium text-red-600 dark:text-red-500 hover:underline">Remove</a>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <form method="POST" action="{{route('posts.destroy', $item)}}">
+                                @csrf
+                                @method('delete')
+                                <a href="{{route('posts.edit', $item)}}"><i class="fas fa-edit text-xl hover:text-2xl mr-2"></i></a>
+                                <button type='submit'><i class="fas fa-trash text-xl hover:text-2xl"></i></button>
+                            </form>
                         </td>
                     </tr>
                 @endforeach
